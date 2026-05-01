@@ -96,7 +96,7 @@ export default function BulkResults({ results }: Props) {
                 <Tooltip
                   contentStyle={{ background: "hsl(220,15%,12%)", border: "1px solid hsl(220,15%,20%)", borderRadius: "8px", fontSize: "12px" }}
                   itemStyle={{ color: "#fff" }}
-                  formatter={(value: number) => [value.toFixed(3), "Importance"]}
+                  formatter={(value: any) => [Number(value).toFixed(3), "Importance"]}
                 />
                 <Bar dataKey="importance" radius={[0, 4, 4, 0]} fill="url(#barGrad)" />
                 <defs>
