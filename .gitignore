@@ -1,0 +1,66 @@
+# -----------------------------
+# Global / OS
+# -----------------------------
+.DS_Store
+Thumbs.db
+
+# -----------------------------
+# Secrets & Environments
+# -----------------------------
+.env
+*.env
+.env.local
+
+# -----------------------------
+# Python / ML Service
+# -----------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.venv/
+ml-service/venv/
+
+# -----------------------------
+# Java / Spring Boot
+# -----------------------------
+target/
+backend/target/
+backend/apache-maven-*/
+*.jar
+*.war
+*.ear
+
+# -----------------------------
+# Node / Next.js
+# -----------------------------
+node_modules/
+frontend/node_modules/
+.next/
+frontend/.next/
+out/
+build/
+
+# -----------------------------
+# IDEs / Editor
+# -----------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# -----------------------------
+# Logs
+# -----------------------------
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# -----------------------------
+# Markdown files
+# -----------------------------
+*.md
+!README.md
+!readme.md
