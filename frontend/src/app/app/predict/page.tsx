@@ -10,7 +10,7 @@ import BulkResults from "@/components/predict/BulkResults";
 import type { PredictionInput, PredictionResult, BulkPredictionResult } from "@/lib/api";
 import { MOCK_PREDICTION } from "@/lib/api";
 
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 type Tab = "single" | "bulk";
 
