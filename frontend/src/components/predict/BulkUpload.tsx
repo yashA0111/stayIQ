@@ -39,7 +39,7 @@ export default function BulkUpload({ onResults, loading, setLoading }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
 
-  const USE_MOCK = true;
+  const USE_MOCK = false;
 
   const processFile = useCallback(async (f: File) => {
     setError(null);
