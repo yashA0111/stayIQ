@@ -76,8 +76,9 @@ public ResponseEntity<?> debug() {
             return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
         }
     }
+//removed raw procedure 
 
-    // 3. Raw JDBC CallableStatement to @PutMapping("/bookings/{id}/cancel")
+ @PutMapping("/bookings/{id}/cancel")
 public ResponseEntity<?> cancelBooking(@PathVariable int id) {
     try {
         String updateSql = "UPDATE bookings SET status = 'Canceled' WHERE id = ? AND status != 'Canceled'";
