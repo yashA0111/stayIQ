@@ -66,7 +66,7 @@ public ResponseEntity<?> debug() {
     @GetMapping("/audit")
     public ResponseEntity<?> getAuditLogs(@RequestParam(defaultValue = "10") int limit) {
         try {
-            String sql = "SELECT a.audit_id, a.booking_id, a.old_status, a.new_status, a.action, a.changed_at, b.guest_name " +
+            String sql = "SELECT a.audit_id AS id, a.booking_id, a.old_status, a.new_status, a.action, a.changed_at, b.guest_name " +
                          "FROM booking_audit a " +
                          "JOIN bookings b ON a.booking_id = b.id " +
                          "ORDER BY a.changed_at DESC LIMIT ?";
@@ -77,33 +77,18 @@ public ResponseEntity<?> debug() {
         }
     }
 
-    // 3. Raw JDBC CallableStatement to execute the Stored Procedure
-    @PutMapping("/bookings/{id}/cancel")
-    public ResponseEntity<?> cancelBooking(@PathVariable int id) {
-        try {
-            String procSql = "{call cancel_booking_sp(?)}";
-            
-            jdbcTemplate.execute(
-                new CallableStatementCreator() {
-                    @Override
-                    public CallableStatement createCallableStatement(Connection con) throws SQLException {
-                        CallableStatement cs = con.prepareCall(procSql);
-                        cs.setInt(1, id);
-                        return cs;
-                    }
-                },
-                new CallableStatementCallback<Object>() {
-                    @Override
-                    public Object doInCallableStatement(CallableStatement cs) throws SQLException {
-                        cs.execute();
-                        return null;
-                    }
-                }
-            );
-            
-            return ResponseEntity.ok().body(Map.of("message", "Booking canceled successfully via stored procedure"));
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to cancel booking: " + e.getMessage()));
-        }
+    // 3. Raw JDBC CallableStatement to @PutMapping("/bookings/{id}/cancel")
+public ResponseEntity<?> cancelBooking(@PathVariable int id) {
+    try {
+        String updateSql = "UPDATE bookings SET status = 'Canceled' WHERE id = ? AND status != 'Canceled'";
+        jdbcTemplate.update(updateSql, id);
+
+        String auditSql = "INSERT INTO booking_audit (booking_id, old_status, new_status, action) VALUES (?, 'Confirmed', 'Canceled', 'Status changed from Confirmed to Canceled')";
+        jdbcTemplate.update(auditSql, id);
+
+        return ResponseEntity.ok().body(Map.of("message", "Booking canceled successfully"));
+    } catch (Exception e) {
+        return ResponseEntity.internalServerError().body(Map.of("error", "Failed to cancel booking: " + e.getMessage()));
     }
+}
 }
