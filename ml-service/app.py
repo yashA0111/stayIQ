@@ -63,7 +63,9 @@ def prepare_data(data_dict):
             known_classes = list(le.classes_)
             df[col] = df[col].apply(lambda x: x if x in known_classes else known_classes[0])
             df[col] = le.transform(df[col].astype(str))
-            
+    for col in df.columns:
+       if col not in label_encoders:
+            df[col]=pd.to_numeric(df[col], errors='coerce').fillna(0) 
     # Scale features
     df_scaled = scaler.transform(df)
     return df_scaled, df
