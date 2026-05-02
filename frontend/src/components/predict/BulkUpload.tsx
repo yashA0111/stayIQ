@@ -128,9 +128,9 @@ export default function BulkUpload({ onResults, loading, setLoading }: Props) {
         const result = await predictBatch(rows);
         onResults(result);
       }
-    } catch {
-      setError("Prediction failed. Please check the file format.");
-    } finally {
+    } catch (err: any) {
+  setError(`Failed: ${err?.message || String(err)}`);
+} finally {
       setLoading(false);
     }
   };
