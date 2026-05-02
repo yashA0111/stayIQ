@@ -8,7 +8,7 @@ import TriggerExplainer from "@/components/audit/TriggerExplainer";
 import { MOCK_BOOKINGS, MOCK_AUDIT } from "@/lib/api";
 import type { AuditRecord, Booking } from "@/lib/api";
 
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 export default function AuditPage() {
   const [audit, setAudit] = useState<AuditRecord[]>(MOCK_AUDIT);
