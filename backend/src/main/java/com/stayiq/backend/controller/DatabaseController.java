@@ -21,6 +21,35 @@ public class DatabaseController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+// Health check - shows DB connection status
+@GetMapping("/")
+public ResponseEntity<?> root() {
+    try {
+        String sql = "SELECT 1";
+        jdbcTemplate.queryForObject(sql, Integer.class);
+        return ResponseEntity.ok().body(Map.of(
+            "status", "healthy",
+            "message", "Java backend is running and DB is connected"
+        ));
+    } catch (Exception e) {
+        return ResponseEntity.internalServerError().body(Map.of(
+            "status", "error",
+            "message", "Java backend running but DB connection FAILED",
+            "error", e.getMessage()
+        ));
+    }
+}
+
+// Env check - shows what DB URL is being used
+@GetMapping("/debug")
+public ResponseEntity<?> debug() {
+    return ResponseEntity.ok().body(Map.of(
+        "db_url", System.getenv("DB_URL") != null ? System.getenv("DB_URL") : "NOT SET - using default",
+        "db_user", System.getenv("DB_USERNAME") != null ? System.getenv("DB_USERNAME") : "NOT SET - using default",
+        "frontend_url", System.getenv("FRONTEND_URL") != null ? System.getenv("FRONTEND_URL") : "NOT SET"
+    ));
+}
+
     // 1. Raw JDBC query for fetching all bookings
     @GetMapping("/bookings")
     public ResponseEntity<?> getBookings() {
